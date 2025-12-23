@@ -1,0 +1,10 @@
+TherapyNotes.API/bin
+TherapyNotes.API/obj
+TherapyNotes.Core/bin
+TherapyNotes.Core/obj
+TherapyNotes.Infrastructure/bin
+TherapyNotes.Infrastructure/obj
+**/bin
+**/obj
+**/.vs
+

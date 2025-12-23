@@ -1,0 +1,66 @@
+# Production Docker Compose
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: therapynotes-mongodb-prod
+    ports:
+      - "27019:27017"
+    volumes:
+      - mongodb-data-prod:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: therapynotes
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-changeme}
+    networks:
+      - therapynotes-network
+    restart: always
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: therapynotes-backend-prod
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - JWT__Secret=${JWT_SECRET}
+      - JWT__ExpiryHours=24
+      - MongoDB__ConnectionString=${MONGODB_URI}
+      - MongoDB__DatabaseName=therapynotes
+      - Storage__Endpoint=${STORAGE_ENDPOINT}
+      - Storage__AccessKey=${STORAGE_ACCESS_KEY}
+      - Storage__SecretKey=${STORAGE_SECRET_KEY}
+      - Storage__BucketName=${STORAGE_BUCKET_NAME}
+      - Storage__Region=${STORAGE_REGION:-auto}
+    depends_on:
+      - mongodb
+    networks:
+      - therapynotes-network
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: therapynotes-frontend-prod
+    ports:
+      - "3060:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=${API_URL:-http://localhost:5000}
+    depends_on:
+      - backend
+    networks:
+      - therapynotes-network
+    restart: always
+
+volumes:
+  mongodb-data-prod:
+
+networks:
+  therapynotes-network:
+    driver: bridge
+
