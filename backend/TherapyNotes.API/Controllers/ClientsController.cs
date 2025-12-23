@@ -158,5 +158,70 @@ public class ClientsController : ControllerBase
             return StatusCode(500, new { message = "An error occurred", error = ex.Message });
         }
     }
+
+    [HttpPut("{clientId}/goals/{goalId}")]
+    public async Task<IActionResult> UpdateGoal(string clientId, string goalId, [FromBody] UpdateGoalRequest request)
+    {
+        try
+        {
+            var therapistId = GetUserId();
+            if (GetUserRole() != "therapist")
+                return Forbid();
+
+            var result = await _clientService.UpdateGoalAsync(clientId, goalId, therapistId, request);
+
+            if (!result)
+                return NotFound(new { message = "Goal or client not found" });
+
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An error occurred", error = ex.Message });
+        }
+    }
+
+    [HttpDelete("{clientId}/goals/{goalId}")]
+    public async Task<IActionResult> DeleteGoal(string clientId, string goalId)
+    {
+        try
+        {
+            var therapistId = GetUserId();
+            if (GetUserRole() != "therapist")
+                return Forbid();
+
+            var result = await _clientService.DeleteGoalAsync(clientId, goalId, therapistId);
+
+            if (!result)
+                return NotFound(new { message = "Goal or client not found" });
+
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An error occurred", error = ex.Message });
+        }
+    }
+
+    [HttpPatch("{clientId}/goals/{goalId}/progress")]
+    public async Task<IActionResult> UpdateGoalProgress(string clientId, string goalId, [FromBody] UpdateGoalProgressRequest request)
+    {
+        try
+        {
+            var userId = GetUserId();
+            
+            // Allow both therapists and parents to update progress manually if needed
+            var result = await _clientService.UpdateGoalProgressAsync(clientId, goalId, request.NewLevel);
+
+            if (!result)
+                return NotFound(new { message = "Goal or client not found" });
+
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An error occurred", error = ex.Message });
+        }
+    }
 }
 

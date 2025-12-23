@@ -20,6 +20,8 @@ public interface IClientService
     Task<ClientResponse?> UpdateClientAsync(string clientId, string therapistId, UpdateClientRequest request);
     Task<bool> DeleteClientAsync(string clientId, string therapistId);
     Task<ClientGoalDto> AddGoalAsync(string clientId, string therapistId, AddGoalRequest request);
+    Task<bool> UpdateGoalAsync(string clientId, string goalId, string therapistId, UpdateGoalRequest request);
+    Task<bool> DeleteGoalAsync(string clientId, string goalId, string therapistId);
     Task<bool> UpdateGoalProgressAsync(string clientId, string goalId, int newLevel);
 }
 

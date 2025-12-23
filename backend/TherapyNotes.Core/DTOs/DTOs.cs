@@ -20,7 +20,9 @@ public record ClientResponse(
     DateTime CreatedAt
 );
 public record ClientGoalDto(string GoalId, string Description, DateTime? TargetDate, int CurrentLevel, DateTime CreatedAt);
-public record AddGoalRequest(string ClientId, string Description, DateTime? TargetDate);
+public record AddGoalRequest(string? ClientId, string Description, DateTime? TargetDate);
+public record UpdateGoalRequest(string Description, DateTime? TargetDate);
+public record UpdateGoalProgressRequest(int NewLevel);
 
 // Session DTOs
 public record CreateSessionRequest(

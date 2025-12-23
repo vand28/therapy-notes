@@ -87,16 +87,16 @@ export default function VoiceRecorder({ onTranscribe, isPremium = false }: Voice
 
   if (!isPremium) {
     return (
-      <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+      <div className="bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
         <div className="flex items-center space-x-3">
           <div className="text-2xl">🎤</div>
           <div className="flex-1">
-            <div className="font-medium text-purple-900">Voice-to-Text Notes</div>
-            <div className="text-sm text-purple-700">Premium feature - Upgrade to unlock</div>
+            <div className="font-medium text-purple-900 dark:text-purple-300">Voice-to-Text Notes</div>
+            <div className="text-sm text-purple-700 dark:text-purple-400">Premium feature - Upgrade to unlock</div>
           </div>
           <a
             href="/dashboard/upgrade"
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"
+            className="px-4 py-2 bg-purple-600 dark:bg-purple-500 text-white rounded-lg hover:bg-purple-700 dark:hover:bg-purple-600 text-sm font-medium"
           >
             Upgrade
           </a>
@@ -106,12 +106,12 @@ export default function VoiceRecorder({ onTranscribe, isPremium = false }: Voice
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4">
+    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
       <div className="flex items-center space-x-3 mb-4">
         <div className="text-2xl">🎤</div>
         <div className="flex-1">
-          <div className="font-medium text-gray-900">Voice Recording</div>
-          <div className="text-sm text-gray-600">Record notes and transcribe with AI</div>
+          <div className="font-medium text-gray-900 dark:text-white">Voice Recording</div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Record notes and transcribe with AI</div>
         </div>
       </div>
 
@@ -120,28 +120,28 @@ export default function VoiceRecorder({ onTranscribe, isPremium = false }: Voice
           onClick={isRecording ? stopRecording : startRecording}
           className={`w-full py-3 px-4 rounded-lg font-medium ${
             isRecording
-              ? 'bg-red-600 text-white hover:bg-red-700'
-              : 'bg-purple-600 text-white hover:bg-purple-700'
+              ? 'bg-red-600 dark:bg-red-500 text-white hover:bg-red-700 dark:hover:bg-red-600'
+              : 'bg-purple-600 dark:bg-purple-500 text-white hover:bg-purple-700 dark:hover:bg-purple-600'
           }`}
         >
           {isRecording ? '⏸ Stop Recording' : '🎙 Start Recording'}
         </button>
       ) : (
         <div className="space-y-2">
-          <div className="text-sm text-gray-600 text-center mb-3">
+          <div className="text-sm text-gray-600 dark:text-gray-400 text-center mb-3">
             ✓ Recording captured
           </div>
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={handleDiscard}
-              className="py-2 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+              className="py-2 px-4 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
             >
               Discard
             </button>
             <button
               onClick={handleTranscribe}
               disabled={isTranscribing}
-              className="py-2 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium disabled:opacity-50"
+              className="py-2 px-4 bg-purple-600 dark:bg-purple-500 text-white rounded-lg hover:bg-purple-700 dark:hover:bg-purple-600 font-medium disabled:opacity-50"
             >
               {isTranscribing ? 'Transcribing...' : 'Transcribe'}
             </button>

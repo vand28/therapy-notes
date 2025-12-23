@@ -79,46 +79,46 @@ export default function InviteParentModal({ clientId, clientName, onClose, onSuc
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-md w-full p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Invite Parent</h2>
-        <p className="text-gray-600 mb-6">
+    <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center z-50 p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Invite Parent</h2>
+        <p className="text-gray-600 dark:text-gray-400 mb-6">
           Invite a parent to access {clientName}'s progress and session notes
         </p>
 
         {error && (
-          <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          <div className="mb-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded">
             {error}
           </div>
         )}
 
         {showSuccess && !tempPassword && (
-          <div className="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+          <div className="mb-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-3 rounded">
             ✓ Parent successfully linked to client!
           </div>
         )}
 
         {tempPassword && (
-          <div className="mb-4 bg-blue-50 border-2 border-blue-300 rounded-lg p-4">
+          <div className="mb-4 bg-blue-50 dark:bg-blue-900/30 border-2 border-blue-300 dark:border-blue-700 rounded-lg p-4">
             <div className="flex items-start mb-3">
               <span className="text-2xl mr-2">🔑</span>
               <div>
-                <h3 className="font-bold text-blue-900 mb-1">Temporary Password Created</h3>
-                <p className="text-sm text-blue-700">Share this password securely with the parent</p>
+                <h3 className="font-bold text-blue-900 dark:text-blue-300 mb-1">Temporary Password Created</h3>
+                <p className="text-sm text-blue-700 dark:text-blue-400">Share this password securely with the parent</p>
               </div>
             </div>
-            <div className="bg-white border border-blue-300 rounded p-3 mb-3">
-              <div className="text-xs text-gray-600 mb-1">Parent Email:</div>
-              <div className="font-mono text-sm text-gray-900 mb-3">{parentEmail}</div>
-              <div className="text-xs text-gray-600 mb-1">Temporary Password:</div>
-              <div className="font-mono text-2xl font-bold text-blue-600 select-all">{tempPassword}</div>
+            <div className="bg-white dark:bg-gray-900 border border-blue-300 dark:border-blue-700 rounded p-3 mb-3">
+              <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Parent Email:</div>
+              <div className="font-mono text-sm text-gray-900 dark:text-gray-100 mb-3">{parentEmail}</div>
+              <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Temporary Password:</div>
+              <div className="font-mono text-2xl font-bold text-blue-600 dark:text-blue-400 select-all">{tempPassword}</div>
             </div>
-            <p className="text-xs text-blue-600">
+            <p className="text-xs text-blue-600 dark:text-blue-400">
               ⚠️ Save this password now. Parent should change it after first login.
             </p>
             <button
               onClick={handleClose}
-              className="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+              className="w-full mt-4 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 font-medium"
             >
               Done
             </button>
@@ -128,7 +128,7 @@ export default function InviteParentModal({ clientId, clientName, onClose, onSuc
         {!showSuccess && !tempPassword && (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="parentName" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="parentName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Parent Name
               </label>
               <input
@@ -138,13 +138,13 @@ export default function InviteParentModal({ clientId, clientName, onClose, onSuc
                 onChange={(e) => setParentName(e.target.value)}
                 required
                 disabled={loading}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 dark:disabled:bg-gray-800"
                 placeholder="John Doe"
               />
             </div>
 
             <div>
-              <label htmlFor="parentEmail" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="parentEmail" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Parent Email
               </label>
               <input
@@ -154,7 +154,7 @@ export default function InviteParentModal({ clientId, clientName, onClose, onSuc
                 onChange={(e) => setParentEmail(e.target.value)}
                 required
                 disabled={loading}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 dark:disabled:bg-gray-800"
                 placeholder="parent@example.com"
               />
             </div>
@@ -164,14 +164,14 @@ export default function InviteParentModal({ clientId, clientName, onClose, onSuc
                 type="button"
                 onClick={onClose}
                 disabled={loading}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium disabled:opacity-50"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium disabled:opacity-50"
+                className="flex-1 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 font-medium disabled:opacity-50"
               >
                 {loading ? 'Inviting...' : 'Send Invite'}
               </button>

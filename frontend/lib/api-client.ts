@@ -131,6 +131,26 @@ class ApiClient {
     });
   }
 
+  async updateGoal(clientId: string, goalId: string, description: string, targetDate?: string) {
+    return this.request(`/api/clients/${clientId}/goals/${goalId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ description, targetDate }),
+    });
+  }
+
+  async deleteGoal(clientId: string, goalId: string): Promise<void> {
+    return this.request<void>(`/api/clients/${clientId}/goals/${goalId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async updateGoalProgress(clientId: string, goalId: string, newLevel: number): Promise<void> {
+    return this.request<void>(`/api/clients/${clientId}/goals/${goalId}/progress`, {
+      method: 'PATCH',
+      body: JSON.stringify({ newLevel }),
+    });
+  }
+
   // Session endpoints
   async getSessions(clientId: string): Promise<Session[]> {
     return this.request<Session[]>(`/api/sessions?clientId=${clientId}`);

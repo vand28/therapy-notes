@@ -148,6 +148,41 @@ public class ClientService : IClientService
         return new ClientGoalDto(goal.GoalId, goal.Description, goal.TargetDate, goal.CurrentLevel, goal.CreatedAt);
     }
 
+    public async Task<bool> UpdateGoalAsync(string clientId, string goalId, string therapistId, UpdateGoalRequest request)
+    {
+        var filter = Builders<Client>.Filter.And(
+            Builders<Client>.Filter.Eq(c => c.Id, clientId),
+            Builders<Client>.Filter.Eq(c => c.TherapistId, therapistId),
+            Builders<Client>.Filter.ElemMatch(c => c.Goals, g => g.GoalId == goalId)
+        );
+
+        var update = Builders<Client>.Update
+            .Set("goals.$.description", request.Description)
+            .Set("goals.$.targetDate", request.TargetDate)
+            .Set("goals.$.lastUpdated", DateTime.UtcNow)
+            .Set(c => c.UpdatedAt, DateTime.UtcNow);
+
+        var result = await _dbContext.Clients.UpdateOneAsync(filter, update);
+
+        return result.ModifiedCount > 0;
+    }
+
+    public async Task<bool> DeleteGoalAsync(string clientId, string goalId, string therapistId)
+    {
+        var filter = Builders<Client>.Filter.And(
+            Builders<Client>.Filter.Eq(c => c.Id, clientId),
+            Builders<Client>.Filter.Eq(c => c.TherapistId, therapistId)
+        );
+
+        var update = Builders<Client>.Update
+            .PullFilter(c => c.Goals, g => g.GoalId == goalId)
+            .Set(c => c.UpdatedAt, DateTime.UtcNow);
+
+        var result = await _dbContext.Clients.UpdateOneAsync(filter, update);
+
+        return result.ModifiedCount > 0;
+    }
+
     public async Task<bool> UpdateGoalProgressAsync(string clientId, string goalId, int newLevel)
     {
         var filter = Builders<Client>.Filter.And(
