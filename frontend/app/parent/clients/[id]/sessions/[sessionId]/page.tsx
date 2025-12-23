@@ -45,12 +45,12 @@ export default function ParentSessionDetailPage() {
   };
 
   if (loading) {
-    return <div className="text-center py-12">Loading...</div>;
+    return <div className="text-center py-12 text-gray-900 dark:text-gray-100">Loading...</div>;
   }
 
   if (error || !session) {
     return (
-      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+      <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded">
         {error || 'Session not found'}
       </div>
     );
@@ -60,19 +60,19 @@ export default function ParentSessionDetailPage() {
     <div>
       <button
         onClick={() => router.push(`/parent/clients/${clientId}`)}
-        className="mb-6 text-purple-600 hover:text-purple-700 flex items-center"
+        className="mb-6 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 flex items-center"
       >
         ← Back to Child Profile
       </button>
 
       {/* Session Header */}
-      <div className="bg-white rounded-lg shadow p-6 mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6 border border-transparent dark:border-gray-700">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
               Session: {new Date(session.sessionDate).toLocaleDateString()}
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="text-gray-600 dark:text-gray-400 mt-1">
               {session.durationMinutes} minutes
               {session.template && ` • ${session.template}`}
             </p>
@@ -81,17 +81,17 @@ export default function ParentSessionDetailPage() {
 
         {session.observations && (
           <div className="mb-4">
-            <h3 className="font-semibold text-gray-900 mb-2">Therapist Notes</h3>
-            <p className="text-gray-700 whitespace-pre-wrap">{session.observations}</p>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Therapist Notes</h3>
+            <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{session.observations}</p>
           </div>
         )}
 
         {session.activitiesDone.length > 0 && (
           <div className="mb-4">
-            <h3 className="font-semibold text-gray-900 mb-2">Activities Completed</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Activities Completed</h3>
             <div className="flex flex-wrap gap-2">
               {session.activitiesDone.map((activity, i) => (
-                <span key={i} className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">
+                <span key={i} className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400 text-sm rounded-full">
                   {activity}
                 </span>
               ))}
@@ -101,12 +101,12 @@ export default function ParentSessionDetailPage() {
 
         {session.goalsWorkedOn.length > 0 && (
           <div>
-            <h3 className="font-semibold text-gray-900 mb-2">Goals Worked On</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Goals Worked On</h3>
             <div className="space-y-2">
               {session.goalsWorkedOn.map((goal, i) => (
                 <div key={i} className="text-sm">
-                  <p className="text-gray-700">{goal.progressNotes}</p>
-                  <p className="text-gray-600">Progress: {goal.levelUpdate}%</p>
+                  <p className="text-gray-700 dark:text-gray-300">{goal.progressNotes}</p>
+                  <p className="text-gray-600 dark:text-gray-400">Progress: {goal.levelUpdate}%</p>
                 </div>
               ))}
             </div>
@@ -116,11 +116,11 @@ export default function ParentSessionDetailPage() {
 
       {/* Home Activities */}
       {session.homeActivities.length > 0 && (
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-transparent dark:border-gray-700">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
             Home Activities for You
           </h2>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             Complete these activities at home to help reinforce therapy progress
           </p>
           <div className="space-y-4">
@@ -128,14 +128,16 @@ export default function ParentSessionDetailPage() {
               <div
                 key={index}
                 className={`border rounded-lg p-4 ${
-                  activity.completedByParent ? 'border-green-300 bg-green-50' : 'border-gray-200'
+                  activity.completedByParent 
+                    ? 'border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30' 
+                    : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900'
                 }`}
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">{activity.activity}</h3>
+                    <h3 className="font-medium text-gray-900 dark:text-white">{activity.activity}</h3>
                     {activity.instructions && (
-                      <p className="text-sm text-gray-600 mt-1">{activity.instructions}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{activity.instructions}</p>
                     )}
                   </div>
                   <button
@@ -149,8 +151,8 @@ export default function ParentSessionDetailPage() {
                     disabled={updating === index}
                     className={`ml-4 px-4 py-2 rounded-lg font-medium text-sm ${
                       activity.completedByParent
-                        ? 'bg-green-600 text-white hover:bg-green-700'
-                        : 'bg-purple-600 text-white hover:bg-purple-700'
+                        ? 'bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600'
+                        : 'bg-purple-600 dark:bg-purple-500 text-white hover:bg-purple-700 dark:hover:bg-purple-600'
                     } disabled:opacity-50`}
                   >
                     {updating === index
@@ -162,8 +164,8 @@ export default function ParentSessionDetailPage() {
                 </div>
 
                 {activity.completedByParent && activity.parentNotes && (
-                  <div className="mt-3 pt-3 border-t border-green-200">
-                    <p className="text-sm text-gray-700">
+                  <div className="mt-3 pt-3 border-t border-green-200 dark:border-green-800">
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
                       <span className="font-medium">Your notes:</span> {activity.parentNotes}
                     </p>
                   </div>
@@ -178,7 +180,7 @@ export default function ParentSessionDetailPage() {
                           handleToggleActivity(index, true, notes);
                         }
                       }}
-                      className="text-sm text-purple-600 hover:text-purple-700"
+                      className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300"
                     >
                       + Add notes
                     </button>

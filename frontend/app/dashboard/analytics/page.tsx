@@ -33,7 +33,7 @@ export default function AnalyticsPage() {
   };
 
   if (loading) {
-    return <div className="text-center py-12">Loading analytics...</div>;
+    return <div className="text-center py-12 text-gray-900 dark:text-gray-100">Loading analytics...</div>;
   }
 
   // Calculate statistics
@@ -74,58 +74,58 @@ export default function AnalyticsPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Analytics</h1>
-        <p className="text-gray-600 mt-1">Overview of your practice performance</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Analytics</h1>
+        <p className="text-gray-600 dark:text-gray-400 mt-1">Overview of your practice performance</p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-sm text-gray-600 mb-1">Total Clients</div>
-          <div className="text-3xl font-bold text-blue-600">{totalClients}</div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-transparent dark:border-gray-700">
+          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Total Clients</div>
+          <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">{totalClients}</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-sm text-gray-600 mb-1">Total Sessions</div>
-          <div className="text-3xl font-bold text-green-600">{totalSessions}</div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-transparent dark:border-gray-700">
+          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Total Sessions</div>
+          <div className="text-3xl font-bold text-green-600 dark:text-green-400">{totalSessions}</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-sm text-gray-600 mb-1">Active Goals</div>
-          <div className="text-3xl font-bold text-purple-600">{totalGoals}</div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-transparent dark:border-gray-700">
+          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Active Goals</div>
+          <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">{totalGoals}</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-sm text-gray-600 mb-1">Avg Goal Progress</div>
-          <div className="text-3xl font-bold text-orange-600">{avgGoalProgress.toFixed(0)}%</div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-transparent dark:border-gray-700">
+          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Avg Goal Progress</div>
+          <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">{avgGoalProgress.toFixed(0)}%</div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Sessions by Template */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Sessions by Type</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-transparent dark:border-gray-700">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Sessions by Type</h2>
           <SessionsDonutChart sessions={templateData} />
         </div>
 
         {/* Activity Summary */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Activity Summary</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-transparent dark:border-gray-700">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Activity Summary</h2>
           <div className="space-y-4">
-            <div className="border-b pb-4">
-              <div className="text-sm text-gray-600">Sessions (Last 30 Days)</div>
-              <div className="text-2xl font-bold text-gray-900">{recentSessions}</div>
+            <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
+              <div className="text-sm text-gray-600 dark:text-gray-400">Sessions (Last 30 Days)</div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">{recentSessions}</div>
             </div>
             {mostActiveClient && (
-              <div className="border-b pb-4">
-                <div className="text-sm text-gray-600">Most Active Client</div>
-                <div className="text-lg font-semibold text-gray-900">{mostActiveClient.client.name}</div>
-                <div className="text-sm text-gray-600">{mostActiveClient.sessionCount} sessions</div>
+              <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
+                <div className="text-sm text-gray-600 dark:text-gray-400">Most Active Client</div>
+                <div className="text-lg font-semibold text-gray-900 dark:text-white">{mostActiveClient.client.name}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">{mostActiveClient.sessionCount} sessions</div>
               </div>
             )}
             <div>
-              <div className="text-sm text-gray-600">Most Used Template</div>
-              <div className="text-lg font-semibold text-gray-900">
+              <div className="text-sm text-gray-600 dark:text-gray-400">Most Used Template</div>
+              <div className="text-lg font-semibold text-gray-900 dark:text-white">
                 {templateData[0]?.template || 'None'}
               </div>
-              <div className="text-sm text-gray-600">{templateData[0]?.count || 0} times</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">{templateData[0]?.count || 0} times</div>
             </div>
           </div>
         </div>
@@ -133,8 +133,8 @@ export default function AnalyticsPage() {
 
       {/* Goal Progress Charts */}
       {clients.filter(c => c.goals.length > 0).length > 0 && (
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Goal Progress Trends</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-transparent dark:border-gray-700">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Goal Progress Trends</h2>
           <div className="space-y-8">
             {clients.slice(0, 3).map(client => 
               client.goals.slice(0, 2).map(goal => {
@@ -147,10 +147,10 @@ export default function AnalyticsPage() {
                 ];
 
                 return (
-                  <div key={goal.goalId} className="border-b last:border-b-0 pb-6 last:pb-0">
+                  <div key={goal.goalId} className="border-b border-gray-200 dark:border-gray-700 last:border-b-0 pb-6 last:pb-0">
                     <div className="mb-2">
-                      <div className="font-medium text-gray-900">{client.name}</div>
-                      <div className="text-sm text-gray-600">{goal.description}</div>
+                      <div className="font-medium text-gray-900 dark:text-white">{client.name}</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">{goal.description}</div>
                     </div>
                     <GoalProgressChart goalDescription={goal.description} dataPoints={mockData} />
                   </div>

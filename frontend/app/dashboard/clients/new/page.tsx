@@ -42,19 +42,19 @@ export default function NewClientPage() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Add New Client</h1>
-        <p className="text-gray-600 mt-1">Create a client profile to start documenting sessions</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Add New Client</h1>
+        <p className="text-gray-600 dark:text-gray-400 mt-1">Create a client profile to start documenting sessions</p>
       </div>
 
       {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
+        <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 rounded-lg">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-6 space-y-6">
+      <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6 border border-transparent dark:border-gray-700">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Full Name *
           </label>
           <input
@@ -63,13 +63,13 @@ export default function NewClientPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Child's name"
           />
         </div>
 
         <div>
-          <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Date of Birth
           </label>
           <input
@@ -77,12 +77,12 @@ export default function NewClientPage() {
             type="date"
             value={dateOfBirth}
             onChange={(e) => setDateOfBirth(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
 
         <div>
-          <label htmlFor="diagnosis" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="diagnosis" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Diagnosis (comma-separated)
           </label>
           <input
@@ -90,14 +90,14 @@ export default function NewClientPage() {
             type="text"
             value={diagnosis}
             onChange={(e) => setDiagnosis(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="e.g., ASD, ADHD, Apraxia"
           />
-          <p className="text-sm text-gray-500 mt-1">Separate multiple diagnoses with commas</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Separate multiple diagnoses with commas</p>
         </div>
 
         <div>
-          <label htmlFor="diagnosisNotes" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="diagnosisNotes" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Diagnosis Notes
           </label>
           <textarea
@@ -105,7 +105,7 @@ export default function NewClientPage() {
             value={diagnosisNotes}
             onChange={(e) => setDiagnosisNotes(e.target.value)}
             rows={4}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Additional notes about diagnosis, referrals, etc."
           />
         </div>
@@ -114,14 +114,14 @@ export default function NewClientPage() {
           <button
             type="button"
             onClick={() => router.back()}
-            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+            className="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 font-medium"
+            className="px-6 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 disabled:opacity-50 font-medium"
           >
             {loading ? 'Creating...' : 'Create Client'}
           </button>

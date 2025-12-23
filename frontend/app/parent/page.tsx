@@ -27,12 +27,12 @@ export default function ParentDashboard() {
   };
 
   if (loading) {
-    return <div className="text-center py-12">Loading...</div>;
+    return <div className="text-center py-12 text-gray-900 dark:text-gray-100">Loading...</div>;
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+      <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded">
         {error}
       </div>
     );
@@ -41,17 +41,17 @@ export default function ParentDashboard() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">My Children</h1>
-        <p className="text-gray-600 mt-1">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Children</h1>
+        <p className="text-gray-600 dark:text-gray-400 mt-1">
           View therapy progress and shared session notes
         </p>
       </div>
 
       {clients.length === 0 ? (
-        <div className="bg-white rounded-lg shadow p-12 text-center">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-12 text-center border border-transparent dark:border-gray-700">
           <div className="text-5xl mb-4">👨‍👩‍👧‍👦</div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No children linked yet</h3>
-          <p className="text-gray-600">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No children linked yet</h3>
+          <p className="text-gray-600 dark:text-gray-400">
             Your therapist will invite you and link your child's profile to your account.
           </p>
         </div>
@@ -61,13 +61,13 @@ export default function ParentDashboard() {
             <Link
               key={client.id}
               href={`/parent/clients/${client.id}`}
-              className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6"
+              className="bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-shadow p-6 border border-transparent dark:border-gray-700"
             >
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">{client.name}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{client.name}</h3>
                   {client.dateOfBirth && (
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       {new Date(client.dateOfBirth).toLocaleDateString()}
                     </p>
                   )}
@@ -80,7 +80,7 @@ export default function ParentDashboard() {
                   {client.diagnosis.map((d, i) => (
                     <span
                       key={i}
-                      className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full"
+                      className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-400 text-xs rounded-full"
                     >
                       {d}
                     </span>
@@ -88,10 +88,10 @@ export default function ParentDashboard() {
                 </div>
               )}
 
-              <div className="border-t pt-4">
-                <div className="flex justify-between text-sm text-gray-600">
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                   <span>{client.goals.length} goals</span>
-                  <span className="text-purple-600 font-medium">View Details →</span>
+                  <span className="text-purple-600 dark:text-purple-400 font-medium">View Details →</span>
                 </div>
               </div>
             </Link>

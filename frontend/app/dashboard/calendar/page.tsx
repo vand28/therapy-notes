@@ -88,7 +88,7 @@ export default function CalendarPage() {
   };
 
   if (loading) {
-    return <div className="text-center py-12">Loading calendar...</div>;
+    return <div className="text-center py-12 text-gray-900 dark:text-gray-100">Loading calendar...</div>;
   }
 
   const days = getDaysInMonth(currentDate);
@@ -97,30 +97,30 @@ export default function CalendarPage() {
   return (
     <div>
       <div className="mb-8 flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Calendar</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Calendar</h1>
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setCurrentDate(new Date())}
-            className="px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
+            className="px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
           >
             Today
           </button>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-transparent dark:border-gray-700">
         {/* Calendar Header */}
-        <div className="flex items-center justify-between p-6 border-b">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
           <button
             onClick={() => navigateMonth('prev')}
-            className="px-4 py-2 text-gray-600 hover:text-gray-900"
+            className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
             ← Previous
           </button>
-          <h2 className="text-xl font-semibold text-gray-900">{monthName}</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{monthName}</h2>
           <button
             onClick={() => navigateMonth('next')}
-            className="px-4 py-2 text-gray-600 hover:text-gray-900"
+            className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
             Next →
           </button>
@@ -131,7 +131,7 @@ export default function CalendarPage() {
           {/* Day Headers */}
           <div className="grid grid-cols-7 gap-2 mb-2">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-              <div key={day} className="text-center text-sm font-medium text-gray-600 py-2">
+              <div key={day} className="text-center text-sm font-medium text-gray-600 dark:text-gray-400 py-2">
                 {day}
               </div>
             ))}
@@ -147,13 +147,13 @@ export default function CalendarPage() {
                 <div
                   key={index}
                   className={`min-h-24 p-2 border rounded-lg ${
-                    day ? 'bg-white hover:bg-gray-50' : 'bg-gray-50'
-                  } ${isCurrentDay ? 'border-blue-500 border-2' : 'border-gray-200'}`}
+                    day ? 'bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800' : 'bg-gray-50 dark:bg-gray-800'
+                  } ${isCurrentDay ? 'border-blue-500 dark:border-blue-400 border-2' : 'border-gray-200 dark:border-gray-700'}`}
                 >
                   {day && (
                     <>
                       <div className={`text-sm font-medium mb-1 ${
-                        isCurrentDay ? 'text-blue-600' : 'text-gray-900'
+                        isCurrentDay ? 'text-blue-600 dark:text-blue-400' : 'text-gray-900 dark:text-white'
                       }`}>
                         {day.getDate()}
                       </div>
@@ -164,7 +164,7 @@ export default function CalendarPage() {
                             <Link
                               key={session.id}
                               href={`/dashboard/clients/${session.clientId}`}
-                              className="block text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded truncate hover:bg-blue-200"
+                              className="block text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400 px-2 py-1 rounded truncate hover:bg-blue-200 dark:hover:bg-blue-900/50"
                               title={client?.name}
                             >
                               {client?.name || 'Unknown'}
@@ -172,7 +172,7 @@ export default function CalendarPage() {
                           );
                         })}
                         {sessions.length > 3 && (
-                          <div className="text-xs text-gray-600 px-2">
+                          <div className="text-xs text-gray-600 dark:text-gray-400 px-2">
                             +{sessions.length - 3} more
                           </div>
                         )}
@@ -188,8 +188,8 @@ export default function CalendarPage() {
 
       {/* Today's Sessions */}
       {allSessions.filter(s => isToday(new Date(s.sessionDate))).length > 0 && (
-        <div className="mt-8 bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Today's Sessions</h2>
+        <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-transparent dark:border-gray-700">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Today's Sessions</h2>
           <div className="space-y-3">
             {allSessions.filter(s => isToday(new Date(s.sessionDate))).map(session => {
               const client = clients.find(c => c.id === session.clientId);
@@ -197,17 +197,17 @@ export default function CalendarPage() {
                 <Link
                   key={session.id}
                   href={`/dashboard/clients/${session.clientId}`}
-                  className="block border border-gray-200 rounded-lg p-4 hover:border-blue-400 transition"
+                  className="block border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 rounded-lg p-4 hover:border-blue-400 dark:hover:border-blue-500 transition"
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <div className="font-medium text-gray-900">{client?.name}</div>
-                      <div className="text-sm text-gray-600">
+                      <div className="font-medium text-gray-900 dark:text-white">{client?.name}</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
                         {session.durationMinutes} minutes
                         {session.template && ` • ${session.template}`}
                       </div>
                     </div>
-                    <span className="text-blue-600">View →</span>
+                    <span className="text-blue-600 dark:text-blue-400">View →</span>
                   </div>
                 </Link>
               );
