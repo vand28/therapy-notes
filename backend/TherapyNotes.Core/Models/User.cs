@@ -14,8 +14,22 @@ public class User
     public string Email { get; set; } = string.Empty;
 
     [BsonElement("passwordHash")]
-    [BsonRequired]
-    public string PasswordHash { get; set; } = string.Empty;
+    public string? PasswordHash { get; set; } = string.Empty;
+
+    [BsonElement("authProvider")]
+    public string AuthProvider { get; set; } = "credentials"; // "credentials" | "google"
+
+    [BsonElement("externalId")]
+    public string? ExternalId { get; set; } // OAuth provider user ID
+
+    [BsonElement("mfaEnabled")]
+    public bool MfaEnabled { get; set; } = false;
+
+    [BsonElement("mfaSecret")]
+    public string? MfaSecret { get; set; } // Encrypted TOTP secret
+
+    [BsonElement("backupCodes")]
+    public List<string> BackupCodes { get; set; } = new(); // Hashed backup codes
 
     [BsonElement("role")]
     [BsonRequired]

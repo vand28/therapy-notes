@@ -32,6 +32,9 @@ var stripePremiumPriceId = builder.Configuration["Stripe:PremiumPriceId"] ?? thr
 var resendApiKey = builder.Configuration["Resend:ApiKey"];
 var fromEmail = builder.Configuration["Resend:FromEmail"] ?? "TherapyNotes <noreply@therapynotes.app>";
 
+// OAuth configuration
+var googleClientId = builder.Configuration["Google:ClientId"] ?? "";
+
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -76,6 +79,12 @@ builder.Services.AddSingleton(new MongoDbContext(mongoUri, mongoDbName));
 
 // Register JWT service
 builder.Services.AddSingleton<IJwtService>(new JwtService(jwtSecret, jwtExpiryHours));
+
+// Register OAuth services
+builder.Services.AddSingleton<IGoogleAuthService>(new TherapyNotes.Infrastructure.Auth.GoogleAuthService(googleClientId));
+
+// Register MFA service
+builder.Services.AddSingleton<IMfaService, TherapyNotes.Infrastructure.Auth.MfaService>();
 
 // Register Storage service
 builder.Services.AddSingleton<IStorageService>(

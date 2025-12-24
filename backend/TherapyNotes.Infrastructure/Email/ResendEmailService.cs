@@ -38,4 +38,22 @@ public class ResendEmailService
         Console.WriteLine($"[EMAIL] Usage warning would be sent to {therapistEmail}");
         await Task.CompletedTask;
     }
+
+    public async Task SendAccessRequestNotificationAsync(string therapistEmail, string therapistName, string parentName, string childName)
+    {
+        Console.WriteLine($"[EMAIL] Access request notification would be sent to {therapistEmail}: {parentName} requested access for {childName}");
+        await Task.CompletedTask;
+    }
+
+    public async Task SendAccessApprovedNotificationAsync(string parentEmail, string parentName, string childName)
+    {
+        Console.WriteLine($"[EMAIL] Access approved notification would be sent to {parentEmail}: Access to {childName}'s therapy notes approved");
+        await Task.CompletedTask;
+    }
+
+    public async Task SendAccessRejectedNotificationAsync(string parentEmail, string parentName, string childName, string? reason)
+    {
+        Console.WriteLine($"[EMAIL] Access rejected notification would be sent to {parentEmail}: Access to {childName}'s therapy notes rejected. Reason: {reason}");
+        await Task.CompletedTask;
+    }
 }

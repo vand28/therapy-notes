@@ -1,3 +1,4 @@
+using Google.Apis.Auth;
 using TherapyNotes.Core.DTOs;
 using TherapyNotes.Core.Models;
 
@@ -9,6 +10,11 @@ public interface IAuthService
     Task<AuthResponse> LoginAsync(LoginRequest request);
     Task<User?> GetUserByIdAsync(string userId);
     Task<User?> GetUserByEmailAsync(string email);
+    Task<OAuthAuthResponse> GoogleLoginAsync(string idToken, string? role);
+    Task<MfaSetupResponse> SetupMfaAsync(string userId);
+    Task<bool> VerifyMfaSetupAsync(string userId, string code);
+    Task<AuthResponse> VerifyMfaAsync(string tempToken, string code, bool isBackupCode);
+    Task<bool> DisableMfaAsync(string userId, string password);
 }
 
 public interface IClientService
@@ -58,5 +64,21 @@ public interface IJwtService
 {
     string GenerateToken(User user);
     string? ValidateToken(string token);
+}
+
+public interface IGoogleAuthService
+{
+    Task<GoogleJsonWebSignature.Payload> ValidateGoogleTokenAsync(string idToken);
+}
+
+public interface IMfaService
+{
+    string GenerateSecret();
+    string GenerateQrCodeUri(string userEmail, string secret, string issuer = "TherapyNotes");
+    byte[] GenerateQrCodeImage(string uri);
+    bool ValidateTotp(string secret, string code);
+    List<string> GenerateBackupCodes(int count = 10);
+    string HashBackupCode(string code);
+    bool VerifyBackupCode(string code, string hash);
 }
 

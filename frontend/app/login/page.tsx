@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { apiClient } from '@/lib/api-client';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -26,6 +28,44 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse: any) => {
+    try {
+      setLoading(true);
+      setError('');
+      const response = await apiClient.googleLogin(credentialResponse.credential);
+      
+      if (response.requiresMfa && response.tempToken) {
+        // Handle MFA - store temp token and redirect to MFA page
+        localStorage.setItem('mfaTempToken', response.tempToken);
+        localStorage.setItem('mfaUserId', response.userId);
+        router.push('/mfa-verify');
+      } else {
+        // Login successful
+        apiClient.setToken(response.token);
+        localStorage.setItem('user', JSON.stringify({
+          userId: response.userId,
+          email: response.email,
+          name: response.name,
+          role: response.role,
+        }));
+        
+        if (response.role === 'parent') {
+          router.push('/parent');
+        } else {
+          router.push('/dashboard');
+        }
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Google login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    setError('Google login failed. Please try again.');
   };
 
   return (
@@ -81,6 +121,33 @@ export default function LoginPage() {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
+
+        <div className="mt-6">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">Or continue with</span>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
+              <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
+                <div className="flex justify-center">
+                  <GoogleLogin
+                    onSuccess={handleGoogleSuccess}
+                    onError={handleGoogleError}
+                    theme="outline"
+                    size="large"
+                    width="100%"
+                  />
+                </div>
+              </GoogleOAuthProvider>
+            )}
+          </div>
+        </div>
 
         <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
           Don't have an account?{' '}

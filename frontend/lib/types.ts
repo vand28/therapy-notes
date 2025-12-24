@@ -125,3 +125,44 @@ export interface CreateSessionRequest {
   sharedWithParents: boolean;
 }
 
+export interface OAuthAuthResponse {
+  token: string;
+  userId: string;
+  email: string;
+  name: string;
+  role: string;
+  subscriptionTier: string;
+  requiresMfa: boolean;
+  tempToken?: string;
+}
+
+export interface MfaSetupResponse {
+  secret: string;
+  qrCodeUri: string;
+  qrCodeImage: string; // base64 encoded image
+  backupCodes: string[];
+}
+
+export interface AccessRequest {
+  id: string;
+  parentUserId: string;
+  parentEmail: string;
+  parentName: string;
+  childFirstName: string;
+  childLastName: string;
+  childDateOfBirth: string;
+  therapistEmail: string;
+  status: 'pending' | 'approved' | 'rejected';
+  linkedClientId?: string;
+  rejectionReason?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateAccessRequestData {
+  childFirstName: string;
+  childLastName: string;
+  childDateOfBirth: string;
+  therapistEmail: string;
+}
+

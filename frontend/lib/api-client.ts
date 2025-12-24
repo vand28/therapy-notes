@@ -8,6 +8,10 @@ import type {
   CreateSessionRequest,
   Template,
   UsageSummary,
+  OAuthAuthResponse,
+  MfaSetupResponse,
+  AccessRequest,
+  CreateAccessRequestData,
 } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
@@ -93,6 +97,78 @@ class ApiClient {
 
   logout() {
     this.clearToken();
+  }
+
+  // OAuth endpoints
+  async googleLogin(idToken: string, role?: string): Promise<OAuthAuthResponse> {
+    const response = await this.request<OAuthAuthResponse>('/api/auth/google', {
+      method: 'POST',
+      body: JSON.stringify({ idToken, role }),
+    });
+    if (response.token && !response.requiresMfa) {
+      this.setToken(response.token);
+    }
+    return response;
+  }
+
+  // MFA endpoints
+  async setupMfa(): Promise<MfaSetupResponse> {
+    return this.request<MfaSetupResponse>('/api/auth/mfa/setup', {
+      method: 'POST',
+    });
+  }
+
+  async verifyMfaSetup(code: string): Promise<void> {
+    return this.request<void>('/api/auth/mfa/verify-setup', {
+      method: 'POST',
+      body: JSON.stringify({ code }),
+    });
+  }
+
+  async verifyMfa(tempToken: string, code: string, isBackupCode: boolean = false): Promise<AuthResponse> {
+    const response = await this.request<AuthResponse>('/api/auth/mfa/verify', {
+      method: 'POST',
+      body: JSON.stringify({ tempToken, code, isBackupCode }),
+    });
+    this.setToken(response.token);
+    return response;
+  }
+
+  async disableMfa(password: string): Promise<void> {
+    return this.request<void>('/api/auth/mfa/disable', {
+      method: 'POST',
+      body: JSON.stringify({ password }),
+    });
+  }
+
+  // Access Request endpoints
+  async requestAccess(data: CreateAccessRequestData): Promise<{ message: string; requestId: string }> {
+    return this.request<{ message: string; requestId: string }>('/api/accessrequests/request-access', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getMyAccessRequests(): Promise<AccessRequest[]> {
+    return this.request<AccessRequest[]>('/api/accessrequests/my-requests');
+  }
+
+  async getPendingAccessRequests(): Promise<AccessRequest[]> {
+    return this.request<AccessRequest[]>('/api/accessrequests/pending');
+  }
+
+  async approveAccessRequest(id: string, clientId: string): Promise<void> {
+    return this.request<void>(`/api/accessrequests/${id}/approve`, {
+      method: 'POST',
+      body: JSON.stringify({ clientId }),
+    });
+  }
+
+  async rejectAccessRequest(id: string, reason?: string): Promise<void> {
+    return this.request<void>(`/api/accessrequests/${id}/reject`, {
+      method: 'POST',
+      body: JSON.stringify({ reason }),
+    });
   }
 
   // Client endpoints

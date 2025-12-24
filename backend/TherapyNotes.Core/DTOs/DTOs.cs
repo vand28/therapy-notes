@@ -89,3 +89,32 @@ public record TemplateResponse(
 // Parent DTOs
 public record InviteParentRequest(string ClientId, string ParentEmail, string ParentName);
 
+// OAuth DTOs
+public record GoogleLoginRequest(string IdToken, string? Role = null);
+public record OAuthAuthResponse(string Token, string UserId, string Email, string Name, string Role, string SubscriptionTier, bool RequiresMfa = false, string? TempToken = null);
+
+// MFA DTOs
+public record MfaSetupResponse(string Secret, string QrCodeUri, byte[] QrCodeImage, List<string> BackupCodes);
+public record VerifyMfaSetupRequest(string Code);
+public record MfaVerifyRequest(string TempToken, string Code, bool IsBackupCode = false);
+public record DisableMfaRequest(string Password);
+
+// Access Request DTOs
+public record CreateAccessRequestDto(string ChildFirstName, string ChildLastName, DateTime ChildDateOfBirth, string TherapistEmail);
+public record ApproveAccessRequestDto(string ClientId);
+public record AccessRequestResponseDto(
+    string Id,
+    string ParentUserId,
+    string ParentEmail,
+    string ParentName,
+    string ChildFirstName,
+    string ChildLastName,
+    DateTime ChildDateOfBirth,
+    string TherapistEmail,
+    string Status,
+    string? LinkedClientId,
+    string? RejectionReason,
+    DateTime CreatedAt,
+    DateTime UpdatedAt
+);
+

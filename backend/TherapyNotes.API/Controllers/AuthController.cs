@@ -185,5 +185,128 @@ public class AuthController : ControllerBase
             return StatusCode(500, new { message = "An error occurred while inviting parent", error = ex.Message });
         }
     }
+
+    [HttpPost("google")]
+    public async Task<ActionResult<OAuthAuthResponse>> GoogleLogin([FromBody] GoogleLoginRequest request)
+    {
+        try
+        {
+            var response = await _authService.GoogleLoginAsync(request.IdToken, request.Role);
+            return Ok(response);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An error occurred during Google login", error = ex.Message });
+        }
+    }
+
+    [Authorize]
+    [HttpPost("mfa/setup")]
+    public async Task<ActionResult<MfaSetupResponse>> SetupMfa()
+    {
+        try
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized(new { message = "User not authenticated" });
+            }
+
+            var response = await _authService.SetupMfaAsync(userId);
+            return Ok(response);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An error occurred during MFA setup", error = ex.Message });
+        }
+    }
+
+    [Authorize]
+    [HttpPost("mfa/verify-setup")]
+    public async Task<ActionResult> VerifyMfaSetup([FromBody] VerifyMfaSetupRequest request)
+    {
+        try
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized(new { message = "User not authenticated" });
+            }
+
+            var isValid = await _authService.VerifyMfaSetupAsync(userId, request.Code);
+            
+            if (isValid)
+            {
+                return Ok(new { message = "MFA enabled successfully" });
+            }
+            else
+            {
+                return BadRequest(new { message = "Invalid verification code" });
+            }
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An error occurred during MFA verification", error = ex.Message });
+        }
+    }
+
+    [HttpPost("mfa/verify")]
+    public async Task<ActionResult<AuthResponse>> VerifyMfa([FromBody] MfaVerifyRequest request)
+    {
+        try
+        {
+            var response = await _authService.VerifyMfaAsync(request.TempToken, request.Code, request.IsBackupCode);
+            return Ok(response);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An error occurred during MFA verification", error = ex.Message });
+        }
+    }
+
+    [Authorize]
+    [HttpPost("mfa/disable")]
+    public async Task<ActionResult> DisableMfa([FromBody] DisableMfaRequest request)
+    {
+        try
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized(new { message = "User not authenticated" });
+            }
+
+            var success = await _authService.DisableMfaAsync(userId, request.Password);
+            
+            if (success)
+            {
+                return Ok(new { message = "MFA disabled successfully" });
+            }
+            else
+            {
+                return BadRequest(new { message = "Failed to disable MFA" });
+            }
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An error occurred while disabling MFA", error = ex.Message });
+        }
+    }
 }
 

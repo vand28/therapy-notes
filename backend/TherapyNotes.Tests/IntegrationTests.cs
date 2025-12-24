@@ -187,3 +187,172 @@ public class UsageEndpointTests : IntegrationTestsBase
     }
 }
 
+public class MfaEndpointTests : IntegrationTestsBase
+{
+    public MfaEndpointTests(WebApplicationFactory<Program> factory) : base(factory) { }
+
+    [Fact]
+    public async Task SetupMfa_Authenticated_ReturnsSetupData()
+    {
+        // Arrange
+        var (token, userId) = await RegisterAndLoginTestUserAsync($"mfa-test-{Guid.NewGuid()}@test.com");
+        SetAuthToken(token);
+
+        // Act
+        var response = await _client.PostAsync("/api/auth/mfa/setup", null);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var result = await response.Content.ReadFromJsonAsync<MfaSetupResponse>();
+        result.Should().NotBeNull();
+        result!.Secret.Should().NotBeNullOrEmpty();
+        result.QrCodeUri.Should().NotBeNullOrEmpty();
+        result.BackupCodes.Should().HaveCountGreaterThan(0);
+    }
+
+    [Fact]
+    public async Task SetupMfa_Unauthenticated_ReturnsUnauthorized()
+    {
+        // Act
+        var response = await _client.PostAsync("/api/auth/mfa/setup", null);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
+    public async Task VerifyMfaSetup_WithInvalidCode_ReturnsBadRequest()
+    {
+        // Arrange
+        var (token, userId) = await RegisterAndLoginTestUserAsync($"mfa-verify-{Guid.NewGuid()}@test.com");
+        SetAuthToken(token);
+        
+        // Setup MFA first
+        await _client.PostAsync("/api/auth/mfa/setup", null);
+
+        // Act - Try to verify with invalid code
+        var verifyRequest = new { Code = "000000" };
+        var response = await _client.PostAsJsonAsync("/api/auth/mfa/verify-setup", verifyRequest);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task DisableMfa_Authenticated_ReturnsSuccess()
+    {
+        // Arrange
+        var (token, userId) = await RegisterAndLoginTestUserAsync($"mfa-disable-{Guid.NewGuid()}@test.com");
+        SetAuthToken(token);
+
+        // Act
+        var disableRequest = new { Password = "TestPassword123!" };
+        var response = await _client.PostAsJsonAsync("/api/auth/mfa/disable", disableRequest);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+}
+
+public class AccessRequestEndpointTests : IntegrationTestsBase
+{
+    public AccessRequestEndpointTests(WebApplicationFactory<Program> factory) : base(factory) { }
+
+    [Fact]
+    public async Task RequestAccess_AsParent_ReturnsSuccess()
+    {
+        // Arrange
+        var (token, userId) = await RegisterAndLoginTestUserAsync($"parent-{Guid.NewGuid()}@test.com", "parent");
+        SetAuthToken(token);
+
+        var request = new
+        {
+            ChildFirstName = "John",
+            ChildLastName = "Doe",
+            ChildDateOfBirth = "2015-01-01",
+            TherapistEmail = "therapist@test.com"
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/accessrequests/request-access", request);
+
+        // Assert
+        response.StatusCode.Should().BeOneOf(HttpStatusCode.OK, HttpStatusCode.NotFound); // NotFound if therapist doesn't exist
+    }
+
+    [Fact]
+    public async Task GetMyRequests_AsParent_ReturnsRequests()
+    {
+        // Arrange
+        var (token, userId) = await RegisterAndLoginTestUserAsync($"parent-requests-{Guid.NewGuid()}@test.com", "parent");
+        SetAuthToken(token);
+
+        // Act
+        var response = await _client.GetAsync("/api/accessrequests/my-requests");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var result = await response.Content.ReadFromJsonAsync<List<AccessRequestResponse>>();
+        result.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task GetPendingRequests_AsTherapist_ReturnsRequests()
+    {
+        // Arrange
+        var (token, userId) = await RegisterAndLoginTestUserAsync($"therapist-pending-{Guid.NewGuid()}@test.com", "therapist");
+        SetAuthToken(token);
+
+        // Act
+        var response = await _client.GetAsync("/api/accessrequests/pending");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var result = await response.Content.ReadFromJsonAsync<List<AccessRequestResponse>>();
+        result.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task RequestAccess_AsTherapist_ReturnsBadRequest()
+    {
+        // Arrange
+        var (token, userId) = await RegisterAndLoginTestUserAsync($"therapist-wrong-role-{Guid.NewGuid()}@test.com", "therapist");
+        SetAuthToken(token);
+
+        var request = new
+        {
+            ChildFirstName = "John",
+            ChildLastName = "Doe",
+            ChildDateOfBirth = "2015-01-01",
+            TherapistEmail = "therapist@test.com"
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/accessrequests/request-access", request);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+}
+
+// DTOs for tests
+public record MfaSetupResponse(string Secret, string QrCodeUri, byte[] QrCodeImage, List<string> BackupCodes);
+public record UsageSummaryResponse(UsageLimits Limits, UsageStats Current);
+public record UsageLimits(int MaxClients, int MaxSessionsPerMonth, double MaxStorageMB);
+public record UsageStats(int ClientCount, int SessionsThisMonth, double StorageUsedMB);
+public record AccessRequestResponse(
+    string Id,
+    string ParentUserId,
+    string ParentEmail,
+    string ParentName,
+    string ChildFirstName,
+    string ChildLastName,
+    DateTime ChildDateOfBirth,
+    string TherapistEmail,
+    string Status,
+    string? LinkedClientId,
+    string? RejectionReason,
+    DateTime CreatedAt,
+    DateTime UpdatedAt
+);
+
