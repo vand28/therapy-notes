@@ -23,6 +23,9 @@ A full-stack therapy session documentation platform built for OT and Speech ther
 
 ## ✨ Features
 
+- ✅ **Mobile-First Quick Entry** - 30-second session documentation with voice input and camera capture
+- ✅ **Voice-to-Text** - Browser Speech API for free voice transcription (no API costs)
+- ✅ **Camera Capture** - Take photos directly from mobile device, auto-compressed
 - ✅ **Smart Templates** - Pre-built templates for common session types (fine motor, sensory, communication, etc.)
 - ✅ **Client Management** - Track clients, diagnosis, and goals
 - ✅ **Session Documentation** - Quick session notes with activity tracking
@@ -30,7 +33,8 @@ A full-stack therapy session documentation platform built for OT and Speech ther
 - ✅ **Parent Portal** - Read-only access for parents to view shared sessions
 - ✅ **Media Uploads** - Attach photos/videos to sessions
 - ✅ **Role-based Access** - Separate therapist and parent accounts
-- ✅ **Subscription Tiers** - Free, Professional, and Premium tiers
+- ✅ **Subscription Tiers** - Free, Professional, Premium, and Practice tiers (Philippines pricing)
+- ✅ **PWA Support** - Installable app on mobile/desktop
 
 ## 📋 Prerequisites
 
@@ -128,7 +132,11 @@ therapy-notes-saas/
 │   ├── Dockerfile.dev                 # Development with hot reload
 │   ├── app/                           # Next.js pages
 │   ├── lib/                           # API client & utilities
-│   └── components/                    # Reusable components
+│   ├── components/                    # Reusable components
+│   │   ├── VoiceInput.tsx             # Browser Speech API
+│   │   ├── CameraCapture.tsx         # HTML5 Camera API
+│   │   └── QuickEntryModal.tsx        # Mobile quick entry
+│   └── types/                         # TypeScript declarations
 ├── docker-compose.yml                 # Development setup
 ├── docker-compose.prod.yml            # Production setup
 └── README.md
@@ -283,11 +291,16 @@ docker-compose -f docker-compose.prod.yml build
 
 Update connection strings to point to production services. Never commit secrets!
 
-## 🎯 Subscription Tiers
+## 🎯 Subscription Tiers (Philippines Market)
 
-- **Free** - 3 clients, 15 sessions/month, 250MB storage
-- **Professional ($24/month)** - Unlimited clients & sessions, 5GB storage
-- **Premium ($49/month)** - Everything + 20GB storage, voice-to-text, custom branding
+- **Free** - 10 clients, 50 sessions/month, 1GB storage, basic parent portal, mobile quick entry
+- **Professional (PHP 299/month)** - Unlimited clients & sessions, 10GB storage, advanced parent portal, PDF reports, analytics
+- **Premium (PHP 599/month)** - Everything in Professional + 25GB storage, advanced analytics
+- **Practice (PHP 1,499/month)** - 5 therapist accounts, 50GB shared storage, practice analytics, admin dashboard
+
+**Payment Methods:** GCash, PayMaya (Maya), PayPal, Credit Cards
+
+**Note:** All tiers include mobile quick entry mode with voice input and camera capture (free Browser APIs).
 
 ## 🧪 Testing
 

@@ -7,7 +7,8 @@ import { apiClient } from '@/lib/api-client';
 import InviteParentModal from '@/components/InviteParentModal';
 import AddGoalModal from '@/components/AddGoalModal';
 import EditGoalModal from '@/components/EditGoalModal';
-import type { Client, Session, ClientGoal } from '@/lib/types';
+import QuickEntryModal from '@/components/QuickEntryModal';
+import type { Client, Session, ClientGoal, Template } from '@/lib/types';
 
 export default function ClientDetailPage() {
   const params = useParams();
@@ -21,6 +22,8 @@ export default function ClientDetailPage() {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showAddGoalModal, setShowAddGoalModal] = useState(false);
   const [showEditGoalModal, setShowEditGoalModal] = useState(false);
+  const [showQuickEntryModal, setShowQuickEntryModal] = useState(false);
+  const [templates, setTemplates] = useState<Template[]>([]);
   const [selectedGoal, setSelectedGoal] = useState<ClientGoal | null>(null);
   const [editingProgress, setEditingProgress] = useState<string | null>(null);
   const [expandedGoalHistory, setExpandedGoalHistory] = useState<string | null>(null);
@@ -32,17 +35,50 @@ export default function ClientDetailPage() {
   const loadData = async () => {
     try {
       setLoading(true);
-      const [clientData, sessionsData] = await Promise.all([
+      const [clientData, sessionsData, templatesData] = await Promise.all([
         apiClient.getClient(clientId),
         apiClient.getSessions(clientId),
+        apiClient.getTemplates(),
       ]);
       setClient(clientData);
       setSessions(sessionsData);
+      setTemplates(templatesData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load data');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleQuickEntrySubmit = async (data: {
+    sessionDate: string;
+    durationMinutes: number;
+    template?: string;
+    activitiesDone: string[];
+    observations: string;
+    nextSteps: string;
+    sharedWithParents: boolean;
+    photoFile?: File;
+  }) => {
+    // Create session first
+    const session = await apiClient.createSession({
+      clientId,
+      sessionDate: new Date(data.sessionDate).toISOString(),
+      durationMinutes: data.durationMinutes,
+      template: data.template,
+      activitiesDone: data.activitiesDone,
+      observations: data.observations,
+      nextSteps: data.nextSteps,
+      sharedWithParents: data.sharedWithParents,
+    });
+
+    // Upload photo if provided
+    if (data.photoFile) {
+      await apiClient.uploadMedia(data.photoFile, session.id);
+    }
+
+    // Reload data to show new session
+    await loadData();
   };
 
   const handleEditGoal = (goal: ClientGoal) => {
@@ -153,6 +189,16 @@ export default function ClientDetailPage() {
         />
       )}
 
+      {showQuickEntryModal && client && (
+        <QuickEntryModal
+          client={client}
+          templates={templates}
+          isOpen={showQuickEntryModal}
+          onClose={() => setShowQuickEntryModal(false)}
+          onSubmit={handleQuickEntrySubmit}
+        />
+      )}
+
       <div className="flex justify-between items-start mb-8">
         <div>
           <Link
@@ -168,12 +214,18 @@ export default function ClientDetailPage() {
             </p>
           )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <button
             onClick={() => setShowInviteModal(true)}
             className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
           >
             👨‍👩‍👧 Invite Parent
+          </button>
+          <button
+            onClick={() => setShowQuickEntryModal(true)}
+            className="px-4 py-2 bg-green-600 dark:bg-green-500 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-600 font-medium"
+          >
+            ⚡ Quick Entry
           </button>
           <Link
             href={`/dashboard/clients/${clientId}/session/new`}
