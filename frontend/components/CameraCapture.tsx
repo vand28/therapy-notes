@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface CameraCaptureProps {
   onCapture: (file: File) => void;
@@ -8,6 +8,12 @@ interface CameraCaptureProps {
   disabled?: boolean;
   maxSizeMB?: number;
 }
+
+// Validate that preview URL is a safe blob URL
+const isValidBlobUrl = (url: string | null): boolean => {
+  if (!url) return false;
+  return url.startsWith('blob:') || url.startsWith('data:image/');
+};
 
 export default function CameraCapture({ 
   onCapture, 
@@ -163,6 +169,15 @@ export default function CameraCapture({
     }
   };
 
+  // Cleanup blob URLs on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (preview && isValidBlobUrl(preview)) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
+
   return (
     <div className="space-y-3">
       <input
@@ -225,12 +240,19 @@ export default function CameraCapture({
         </div>
       )}
 
-      {preview && (
+      {preview && isValidBlobUrl(preview) && (
         <div className="space-y-2">
           <img
             src={preview}
             alt="Preview"
             className="w-full max-w-md mx-auto rounded-lg border border-gray-300 dark:border-gray-600"
+            loading="lazy"
+            crossOrigin="anonymous"
+            referrerPolicy="no-referrer"
+            onError={() => {
+              onError?.('Failed to load image preview');
+              clearPreview();
+            }}
           />
           <button
             type="button"
