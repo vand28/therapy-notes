@@ -40,7 +40,7 @@ export default function DashboardLayout({
                 onClick={() => router.push('/dashboard')}
                 className="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
               >
-                TherapyNotes
+                Regulie
               </button>
               <div className="hidden md:flex items-center space-x-1">
                 <NavLink href="/dashboard" icon="👥">Clients</NavLink>

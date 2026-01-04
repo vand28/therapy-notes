@@ -1,6 +1,6 @@
-# TherapyNotes Frontend
+# Regulie Frontend
 
-Next.js 16 frontend application for TherapyNotes - Mobile-first therapy session management platform.
+Next.js 16 frontend application for Regulie - Helping kids find their calm, step by step. Mobile-first therapy session management platform.
 
 ## 🚀 Tech Stack
 

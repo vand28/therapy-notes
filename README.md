@@ -1,6 +1,6 @@
-# TherapyNotes - Modern Session Management for Therapists
+# Regulie — Helping kids find their calm, step by step
 
-A full-stack therapy session documentation platform built for OT and Speech therapists. Features include smart templates, goal tracking, parent portals, and cloud-agnostic storage.
+**Regulie (reh-gyoo-lee)** - A full-stack therapy session documentation platform built for OT and Speech therapists. Features include smart templates, goal tracking, parent portals, and cloud-agnostic storage.
 
 ## 🚀 Tech Stack
 
@@ -51,7 +51,7 @@ A full-stack therapy session documentation platform built for OT and Speech ther
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd therapy-notes-saas
+cd regulie
 
 # Start everything with one command
 ./docker-start.sh        # Linux/Mac
@@ -81,7 +81,7 @@ docker-compose up -d mongodb minio minio-init
 #### 2. Backend Setup
 
 ```bash
-cd backend/TherapyNotes.API
+cd backend/Regulie.API
 
 # Update appsettings.Development.json with your settings (already configured for local dev)
 
@@ -121,12 +121,12 @@ MongoDB: `mongodb://localhost:27019`
 ## 📁 Project Structure
 
 ```
-therapy-notes-saas/
+regulie/
 ├── backend/
 │   ├── Dockerfile                     # Production Docker image
-│   ├── TherapyNotes.API/              # Web API controllers
-│   ├── TherapyNotes.Core/             # Domain models & interfaces
-│   └── TherapyNotes.Infrastructure/   # MongoDB, S3, JWT services
+│   ├── Regulie.API/                   # Web API controllers
+│   ├── Regulie.Core/                  # Domain models & interfaces
+│   └── Regulie.Infrastructure/        # MongoDB, S3, JWT services
 ├── frontend/
 │   ├── Dockerfile                     # Production Docker image
 │   ├── Dockerfile.dev                 # Development with hot reload
@@ -194,13 +194,13 @@ Create `appsettings.Development.json` or use environment variables:
   },
   "MongoDB": {
     "ConnectionString": "mongodb://localhost:27017",
-    "DatabaseName": "therapynotes"
+    "DatabaseName": "regulie"
   },
   "Storage": {
     "Endpoint": "http://localhost:9000",
     "AccessKey": "minioadmin",
     "SecretKey": "minioadmin123",
-    "BucketName": "therapy-notes",
+    "BucketName": "regulie",
     "Region": "us-east-1"
   }
 }
@@ -306,7 +306,7 @@ Update connection strings to point to production services. Never commit secrets!
 
 Backend:
 ```bash
-cd backend/TherapyNotes.API
+cd backend/Regulie.API
 dotnet test
 ```
 
@@ -326,7 +326,7 @@ Contributions welcome! Please read contributing guidelines first.
 
 ## 📧 Support
 
-For support, email support@therapynotes.app or open an issue.
+For support, email support@regulie.com or open an issue.
 
 ---
 

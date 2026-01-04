@@ -1,7 +1,7 @@
 {
-  "name": "TherapyNotes",
-  "short_name": "TherapyNotes",
-  "description": "Modern therapy session documentation platform",
+  "name": "Regulie",
+  "short_name": "Regulie",
+  "description": "Helping kids find their calm, step by step",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

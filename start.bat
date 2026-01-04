@@ -1,7 +1,7 @@
 @echo off
-REM TherapyNotes Quick Start Script for Windows
+REM Regulie Quick Start Script for Windows
 
-echo Starting TherapyNotes...
+echo Starting Regulie...
 
 REM Check if docker is running
 docker info >nul 2>&1
@@ -25,7 +25,7 @@ echo.
 
 REM Instructions for backend
 echo To start the backend:
-echo    cd backend\TherapyNotes.API
+echo    cd backend\Regulie.API
 echo    dotnet run
 echo.
 

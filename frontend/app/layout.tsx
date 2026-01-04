@@ -4,13 +4,13 @@ import { AuthProvider } from "@/lib/auth-context";
 import { ThemeProvider } from "@/lib/theme-context";
 
 export const metadata: Metadata = {
-  title: "TherapyNotes - Session Management for Therapists",
+  title: "Regulie — Helping kids find their calm, step by step",
   description: "Modern therapy session documentation and parent portal",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "TherapyNotes",
+    title: "Regulie",
   },
 };
 

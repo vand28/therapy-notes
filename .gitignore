@@ -41,3 +41,7 @@ npm-debug.log*
 # Docker
 docker-compose.override.yml
 
+# MongoDB encryption key file (NEVER commit this!)
+docker/mongodb/keyfile
+*.keyfile
+

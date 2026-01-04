@@ -8,7 +8,7 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="container mx-auto px-4 py-16">
         <nav className="flex justify-between items-center mb-16">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">TherapyNotes</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Regulie</h1>
           <div className="flex items-center space-x-4">
             <ThemeToggle />
             <Link
@@ -27,12 +27,15 @@ export default function Home() {
         </nav>
 
         <main className="max-w-4xl mx-auto text-center">
-          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">
-            Modern Session Management
+          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            Regulie
             <br />
-            <span className="text-blue-600 dark:text-blue-400">for Therapy Professionals</span>
+            <span className="text-blue-600 dark:text-blue-400 text-3xl">(reh-gyoo-lee)</span>
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
+          <p className="text-2xl text-gray-700 dark:text-gray-300 mb-6 max-w-2xl mx-auto font-medium">
+            Helping kids find their calm, step by step
+          </p>
+          <p className="text-lg text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
             Save hours every week on documentation. Give parents unprecedented visibility
             into their child's progress. Built specifically for OT and Speech therapists.
           </p>

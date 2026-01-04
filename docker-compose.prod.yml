@@ -4,24 +4,26 @@ version: '3.8'
 services:
   mongodb:
     image: mongo:7
-    container_name: therapynotes-mongodb-prod
+    container_name: regulie-mongodb-prod
     ports:
       - "27019:27017"
     volumes:
       - mongodb-data-prod:/data/db
+      - ./docker/mongodb/mongod.conf:/etc/mongod.conf:ro
+    command: ["mongod", "--config", "/etc/mongod.conf"]
     environment:
-      MONGO_INITDB_DATABASE: therapynotes
+      MONGO_INITDB_DATABASE: regulie
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-admin}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-changeme}
     networks:
-      - therapynotes-network
+      - regulie-network
     restart: always
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: therapynotes-backend-prod
+    container_name: regulie-backend-prod
     ports:
       - "5000:8080"
     environment:
@@ -30,7 +32,7 @@ services:
       - JWT__Secret=${JWT_SECRET}
       - JWT__ExpiryHours=24
       - MongoDB__ConnectionString=${MONGODB_URI}
-      - MongoDB__DatabaseName=therapynotes
+      - MongoDB__DatabaseName=regulie
       - Storage__Endpoint=${STORAGE_ENDPOINT}
       - Storage__AccessKey=${STORAGE_ACCESS_KEY}
       - Storage__SecretKey=${STORAGE_SECRET_KEY}
@@ -39,14 +41,14 @@ services:
     depends_on:
       - mongodb
     networks:
-      - therapynotes-network
+      - regulie-network
     restart: always
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: therapynotes-frontend-prod
+    container_name: regulie-frontend-prod
     ports:
       - "3060:3000"
     environment:
@@ -54,13 +56,13 @@ services:
     depends_on:
       - backend
     networks:
-      - therapynotes-network
+      - regulie-network
     restart: always
 
 volumes:
   mongodb-data-prod:
 
 networks:
-  therapynotes-network:
+  regulie-network:
     driver: bridge
 

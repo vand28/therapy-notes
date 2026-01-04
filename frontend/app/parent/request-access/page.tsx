@@ -40,7 +40,7 @@ export default function RequestAccessPage() {
       <div className="max-w-2xl mx-auto">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border border-transparent dark:border-gray-700">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-            Request Access to Therapy Notes
+            Request Access to Regulie
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
             Submit a request to view your child's therapy progress notes.

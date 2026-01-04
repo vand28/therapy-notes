@@ -3,24 +3,26 @@ version: '3.8'
 services:
   mongodb:
     image: mongo:7
-    container_name: therapynotes-mongodb
+    container_name: regulie-mongodb
     ports:
       - "27019:27017"
     volumes:
       - mongodb-data:/data/db
+      - ./docker/mongodb/mongod.conf:/etc/mongod.conf:ro
+    command: ["mongod", "--config", "/etc/mongod.conf"]
     environment:
-      MONGO_INITDB_DATABASE: therapynotes
+      MONGO_INITDB_DATABASE: regulie
     networks:
-      - therapynotes-network
+      - regulie-network
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/therapynotes --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/regulie --quiet
       interval: 10s
       timeout: 5s
       retries: 5
 
   minio:
     image: minio/minio:latest
-    container_name: therapynotes-minio
+    container_name: regulie-minio
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -31,7 +33,7 @@ services:
       MINIO_ROOT_PASSWORD: minioadmin123
     command: server /data --console-address ":9001"
     networks:
-      - therapynotes-network
+      - regulie-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 10s
@@ -41,26 +43,26 @@ services:
   # MinIO bucket creation
   minio-init:
     image: minio/mc:latest
-    container_name: therapynotes-minio-init
+    container_name: regulie-minio-init
     depends_on:
       minio:
         condition: service_healthy
     entrypoint: >
       /bin/sh -c "
       /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin123;
-      /usr/bin/mc mb myminio/therapy-notes --ignore-existing;
-      /usr/bin/mc anonymous set public myminio/therapy-notes;
+      /usr/bin/mc mb myminio/regulie --ignore-existing;
+      /usr/bin/mc anonymous set public myminio/regulie;
       exit 0;
       "
     networks:
-      - therapynotes-network
+      - regulie-network
 
   # Backend API
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: therapynotes-backend
+    container_name: regulie-backend
     ports:
       - "5000:8080"
     environment:
@@ -69,11 +71,11 @@ services:
       - JWT__Secret=your-super-secret-jwt-key-change-this-in-production-min-32-chars
       - JWT__ExpiryHours=24
       - MongoDB__ConnectionString=mongodb://mongodb:27017
-      - MongoDB__DatabaseName=therapynotes
+      - MongoDB__DatabaseName=regulie
       - Storage__Endpoint=http://minio:9000
       - Storage__AccessKey=minioadmin
       - Storage__SecretKey=minioadmin123
-      - Storage__BucketName=therapy-notes
+      - Storage__BucketName=regulie
       - Storage__Region=us-east-1
     depends_on:
       mongodb:
@@ -83,7 +85,7 @@ services:
       minio-init:
         condition: service_completed_successfully
     networks:
-      - therapynotes-network
+      - regulie-network
     restart: unless-stopped
 
   # Frontend (Development mode with hot reload)
@@ -91,7 +93,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
-    container_name: therapynotes-frontend
+    container_name: regulie-frontend
     ports:
       - "3060:3000"
     environment:
@@ -103,7 +105,7 @@ services:
     depends_on:
       - backend
     networks:
-      - therapynotes-network
+      - regulie-network
     restart: unless-stopped
 
 volumes:
@@ -111,6 +113,6 @@ volumes:
   minio-data:
 
 networks:
-  therapynotes-network:
+  regulie-network:
     driver: bridge
 

@@ -65,13 +65,13 @@ export default function MfaSetupModal({ isOpen, onClose, onSuccess }: MfaSetupMo
   const handleDownloadBackupCodes = () => {
     if (!setupData) return;
 
-    const content = `TherapyNotes - MFA Backup Codes\n\nThese codes can be used to access your account if you lose access to your authenticator app.\nEach code can only be used once.\n\n${setupData.backupCodes.join('\n')}\n\nKeep these codes in a safe place!`;
+    const content = `Regulie - MFA Backup Codes\n\nThese codes can be used to access your account if you lose access to your authenticator app.\nEach code can only be used once.\n\n${setupData.backupCodes.join('\n')}\n\nKeep these codes in a safe place!`;
     
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'therapynotes-backup-codes.txt';
+    a.download = 'regulie-backup-codes.txt';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

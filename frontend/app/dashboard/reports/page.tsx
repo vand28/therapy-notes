@@ -79,7 +79,7 @@ export default function ReportsPage() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `TherapyNotes-Export-${new Date().toISOString().split('T')[0]}.csv`;
+      a.download = `Regulie-Export-${new Date().toISOString().split('T')[0]}.csv`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);

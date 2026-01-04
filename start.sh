@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# TherapyNotes Quick Start Script
+# Regulie Quick Start Script
 
-echo "🚀 Starting TherapyNotes..."
+echo "🚀 Starting Regulie..."
 
 # Check if docker is running
 if ! docker info > /dev/null 2>&1; then
@@ -25,7 +25,7 @@ echo ""
 
 # Instructions for backend
 echo "🔧 To start the backend:"
-echo "   cd backend/TherapyNotes.API"
+echo "   cd backend/Regulie.API"
 echo "   dotnet run"
 echo ""
 
